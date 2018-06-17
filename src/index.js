@@ -11,6 +11,10 @@
  *
  * Version:  0.1.1
  */
+import {$, jQuery} from 'jquery';
+// var $ = require("jquery");
+// import jQuery from 'jquery';
+
 var matrixRows = 32;
 var matrixCollumns = 64;
 var matrix = [];
@@ -42,6 +46,21 @@ function startInit() {
   // console.log(matrix);
 }
 
+// (function ($) {
+//   $('#pixel-picker').pixelPicker({
+//       palette: ['rgb(199, 23, 23)'],
+//       // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
+//       eraserColor: 'rgb(192,192,192)'
+//   });
+// }(jQuery));
+
+$(function () {
+  $('#pixel-picker').pixelPicker({
+      palette: ['rgb(199, 23, 23)'],
+      // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
+      eraserColor: 'rgb(192,192,192)'
+  });
+});
 
 (function ($) {
 
@@ -485,7 +504,7 @@ function imgSendButtonClick() {
   });*/
 }
 
-$(function () {
+/*$(function () {
   $('#msgToSend').submit(function () {
     
     var msgBox = document.getElementById("msg");
@@ -541,7 +560,7 @@ $(function () {
     return false;
   });
 });
-
+*/
 // function handleStart(evt) {
 //   evt.preventDefault();
 //   isDragging = true;
