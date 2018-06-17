@@ -1,0 +1,32 @@
++<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="main.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
+    <!-- <script src="pixel-picker.js"></script> -->
+
+    <script>
+        $(function () {
+            $('#pixel-picker').pixelPicker({
+                palette: ['rgb(199, 23, 23)'],
+                // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
+                eraserColor: 'rgb(192,192,192)'
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div>
+        <canvas height="640" width="1280" id="pixel-picker" style='border: 5px solid black; border-radius: 5px;'></canvas>
+    </div>
+    <div class="container" style="margin-bottom: 10px;">
+        <button id="imgSendButton" class="btn btn-primary" onclick="imgSendButtonClick()">Відправити малюнок</button>
+    </div>
+</body>
+</html>

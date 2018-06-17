@@ -1,0 +1,20 @@
+{
+  "name": "pixeldrawer-doy",
+  "version": "1.0.0",
+  "description": "Pixel Drawer app for Day Of Youth presentation ",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --config webpack.config.js"
+  },
+  "author": "mozokevgen",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.3.1",
+    "mqtt": "^2.18.1"
+  },
+  "devDependencies": {
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.7"
+  }
+}
