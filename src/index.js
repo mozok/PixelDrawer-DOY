@@ -119,6 +119,10 @@ $(function () {
     console.log(data);
     client.publish('DOYPanel/command', data);
   });
+
+  $('#updateButton').click(function () {
+    location.reload();
+  })
 });
 
 (function ($) {
