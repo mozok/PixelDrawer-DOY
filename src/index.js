@@ -15,11 +15,12 @@ import './style.css';
 import logo from './logo.jpg';
 
 import $ from 'jquery';
+import mqtt from 'mqtt';
 // var $ = require("jquery");
 // import jQuery from 'jquery';
 
-var matrixRows = 32;
-var matrixCollumns = 64;
+var matrixRows = 16;
+var matrixCollumns = 32;
 var matrix = [];
 var matrixColorOne = [199, 23, 23];
 var flagInit = true;
@@ -27,9 +28,11 @@ var dataResult;
 var dataResultForMCU;
 var dataURL;
 
+var client = mqtt.connect('wss://mqtt.ihome.org.ua:8080/wss', { clientId: 'WebClient-' + parseInt(Math.random() * 100000) })
 // window.onload = function () {
 //   startInit();
 // }
+var isTouchDevice = false;
 
 function startInit() {
   for (var i = 0; i < matrixRows; i++) {
@@ -58,15 +61,62 @@ function startInit() {
 // }(jQuery));
 
 $(function () {
+  isTouchDevice = 'ontouchstart' in document.documentElement;
+
   $('#pixel-picker').pixelPicker({
-      palette: ['rgb(199, 23, 23)'],
-      // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
-      eraserColor: 'rgb(192,192,192)'
+    palette: ['rgb(199, 23, 23)'],
+    // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
+    eraserColor: 'rgb(192,192,192)'
   });
 
   $('#imgSendButton').click(function () {
-    // console.log("imgButton Click");
-    
+
+    dataResult = '';
+    // dataResultForMCU = '{';
+    var buf;
+    for (var i = 0; i < matrixCollumns; i++) {
+      buf = '';
+      for (var j = 7; j >= 0; j--) {
+        buf += matrix[j][i].toString();
+      }
+      // dataResultForMCU += '0x';
+
+      if (parseInt(buf, 2) <= 0xF) {
+        dataResult += 0;
+        // dataResultForMCU += 0;
+      }
+      dataResult += parseInt(buf, 2).toString(16);
+
+      // dataResultForMCU += parseInt(buf, 2).toString(16);
+      // dataResultForMCU += ',';
+    }
+
+    for (var i = 0; i < matrixCollumns; i++) {
+      buf = '';
+      for (var j = 15; j >= 8; j--) {
+        buf += matrix[j][i].toString();
+      }
+
+      // dataResultForMCU += '0x';
+      if (parseInt(buf, 2) <= 0xF) {
+        dataResult += 0;
+        // dataResultForMCU += 0;
+      }
+      dataResult += parseInt(buf, 2).toString(16);
+
+      // dataResultForMCU += parseInt(buf, 2).toString(16);
+      // dataResultForMCU += ',';
+    }
+
+    // dataResultForMCU = dataResultForMCU.replace(/,$/, '}');
+
+    // var data = "mode=sendImg";
+    var data = "1#" + dataResult;
+    // data += "&dataResultForMCU=" + dataResultForMCU;
+    // data += "&img=" + dataURL;
+
+    console.log(data);
+    client.publish('DOYPanel/command', data);
   });
 });
 
@@ -367,69 +417,70 @@ $(function () {
     // Draw the cells to the canvas
     drawCells();
 
-    // When a cell is clicked in to...
-    $(c).on('mousedown', function (event) {
-      var isRightClick = ('which' in event && event.which === 3) || ('button' in event && event.button === 2);
+    if (!isTouchDevice) {
+      // When a cell is clicked in to...
+      $(c).on('mousedown', function (event) {
+        var isRightClick = ('which' in event && event.which === 3) || ('button' in event && event.button === 2);
 
-      isDragging = true;
+        isDragging = true;
 
-      var x = Math.floor((event.pageX - $(c).offset().left));
-      var y = Math.floor((event.pageY - $(c).offset().top));
+        var x = Math.floor((event.pageX - $(c).offset().left));
+        var y = Math.floor((event.pageY - $(c).offset().top));
 
-      chooseColor(x, y, isRightClick);
-      colorCell(x, y);
-    });
+        chooseColor(x, y, isRightClick);
+        colorCell(x, y);
+      });
 
-    // When a cell is moved over
-    $(c).on('mousemove', function (event) {
-      if (!isDragging) return;
+      // When a cell is moved over
+      $(c).on('mousemove', function (event) {
+        if (!isDragging) return;
 
-      var x = Math.floor((event.pageX - $(c).offset().left));
-      var y = Math.floor((event.pageY - $(c).offset().top));
+        var x = Math.floor((event.pageX - $(c).offset().left));
+        var y = Math.floor((event.pageY - $(c).offset().top));
 
-      colorCell(x, y);
-    });
+        colorCell(x, y);
+      });
 
-    // Turn dragging off when we mouse up
-    $(c).on('mouseup', function () {
-      isDragging = false;
-    });
+      // Turn dragging off when we mouse up
+      $(c).on('mouseup', function () {
+        isDragging = false;
+      });
+    }
 
+    if (isTouchDevice) {
+      $(c).on('touchstart', function (event) {
+        //var isRightClick = ('which' in event && event.which === 3) || ('button' in event && event.button === 2);
 
+        isDragging = true;
 
-    // $(c).on('touchstart', function (event) {
-    //   //var isRightClick = ('which' in event && event.which === 3) || ('button' in event && event.button === 2);
+        var x = Math.floor((event.originalEvent.touches[0].pageX - $(c).offset().left));
+        var y = Math.floor((event.originalEvent.touches[0].pageY - $(c).offset().top));
 
-    //   isDragging = true;
+        chooseColor(x, y, false);
+        colorCell(x, y);
+      });
 
-    //   var x = Math.floor((event.pageX - $(c).offset().left));
-    //   var y = Math.floor((event.pageY - $(c).offset().top));
+      // When a cell is moved over
+      $(c).on('touchmove', function (event) {
+        if (!isDragging) return;
 
-    //   chooseColor(x, y, isRightClick);
-    //   colorCell(x, y);
-    // });
+        var x = Math.floor((event.originalEvent.touches[0].pageX - $(c).offset().left));
+        var y = Math.floor((event.originalEvent.touches[0].pageY - $(c).offset().top));
 
-    // // When a cell is moved over
-    // $(c).on('touchmove', function (event) {
-    //   if (!isDragging) return;
+        colorCell(x, y);
+      });
 
-    //   var x = Math.floor((event.pageX - $(c).offset().left));
-    //   var y = Math.floor((event.pageY - $(c).offset().top));
-
-    //   colorCell(x, y);
-    // });
-
-    // // Turn dragging off when we mouse up
-    // $(c).on('touchend', function () {
-    //   isDragging = false;
-    // });
-
+      // Turn dragging off when we mouse up
+      $(c).on('touchend', function () {
+        isDragging = false;
+      });
+    }
     return this;
   };
 
 }($));
 
-function imgSendButtonClick() {
+/*function imgSendButtonClick() {
   // save canvas image as data url (png format by default)
   // dataURL = document.getElementById('pixel-picker').toDataURL();
   //console.log(dataURL);
@@ -475,20 +526,20 @@ function imgSendButtonClick() {
 
     dataResultForMCU += parseInt(buf, 2).toString(16);
     dataResultForMCU += ',';
-  }
+  }*/
 
-  //dataResultForMCU += '}';
-  dataResultForMCU = dataResultForMCU.replace(/,$/, '}');
-  //console.log(dataResultForMCU);
+//dataResultForMCU += '}';
+// dataResultForMCU = dataResultForMCU.replace(/,$/, '}');
+//console.log(dataResultForMCU);
 
-  // console.log(matrix);
-  var data = "mode=sendImg";
-  data += "&dataResult=" + dataResult;
-  data += "&dataResultForMCU=" + dataResultForMCU;
-  data += "&img=" + dataURL;
-  
-  console.log(data);
-  
+// console.log(matrix);
+// var data = "mode=sendImg";
+// data += "&dataResult=" + dataResult;
+// data += "&dataResultForMCU=" + dataResultForMCU;
+// data += "&img=" + dataURL;
+
+// console.log(data);
+
   /*$.ajax({
     url: 'send.php',
     type: 'POST',
@@ -510,8 +561,8 @@ function imgSendButtonClick() {
     error: function () {
       alert('Помилка!');
     }
-  });*/
-}
+  });
+}*/
 
 /*$(function () {
   $('#msgToSend').submit(function () {

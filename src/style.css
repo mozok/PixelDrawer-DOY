@@ -10,3 +10,7 @@
     /* background: url('./logo.jpg'); */
     font-family: 'Roboto-Regular';
 }
+
+#pixel-picker {
+    touch-action: none;
+}
