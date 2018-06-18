@@ -57,13 +57,18 @@ function startInit() {
 //   });
 // }(jQuery));
 
-// $(function () {
-//   $('#pixel-picker').pixelPicker({
-//       palette: ['rgb(199, 23, 23)'],
-//       // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
-//       eraserColor: 'rgb(192,192,192)'
-//   });
-// });
+$(function () {
+  $('#pixel-picker').pixelPicker({
+      palette: ['rgb(199, 23, 23)'],
+      // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
+      eraserColor: 'rgb(192,192,192)'
+  });
+
+  $('#imgSendButton').click(function () {
+    // console.log("imgButton Click");
+    
+  });
+});
 
 (function ($) {
 
@@ -85,7 +90,8 @@ function startInit() {
       drawCells,
       findCellIndex,
       chooseColor,
-      colorCell;
+      colorCell,
+      initialDraw;
 
     // Helper functions
     var parseColor,
@@ -190,7 +196,7 @@ function startInit() {
 
       if (dontHandle) return;
 
-      for (key in map) {
+      for (let key in map) {
         var cell = map[key];
 
         if (!colorMap[cell.y - 0.5]) colorMap[cell.y - 0.5] = []
@@ -201,7 +207,7 @@ function startInit() {
       if (typeof handler === 'function') {
         // We can either pass off the updated map to a function
         handler(colorMap);
-      } else if (handler instanceof jQuery) {
+      } else if (handler instanceof $) {
         // Or, we can update the value="" of a jQuery input
         handler.val(JSON.stringify(colorMap));
       }
@@ -245,10 +251,10 @@ function startInit() {
 
       ctx.strokeStyle = borderColor;
 
-      for (i = 0; i <= colCount; i++) {
+      for (let i = 0; i <= colCount; i++) {
         var colPos = i * settings.size + 0.5;
 
-        for (r = 0; r <= rowCount; r++) {
+        for (let r = 0; r <= rowCount; r++) {
           var rowPos = r * settings.size + 0.5;
 
           makeCell(colPos, rowPos, settings.size, settings.size);
@@ -591,7 +597,7 @@ function imgSendButtonClick() {
 //   isDragging = false;
 // }
 
-$(function () {
+// $(function () {
 
   // var myIcon = new Image();
   // myIcon.src=logo;
@@ -599,7 +605,8 @@ $(function () {
   // var element = document.getElementById('hello');
   // element.appendChild(myIcon);
 
-  $("imgSendButton").onclick(function () {
-    alert("imgButton Click");
-  });
-});
+//   $('#imgSendButton').click(function () {
+//     console.log("imgButton Click");
+//   });
+// });
+
