@@ -11,7 +11,10 @@
  *
  * Version:  0.1.1
  */
-import {$, jQuery} from 'jquery';
+import './style.css';
+import logo from './logo.jpg';
+
+import $ from 'jquery';
 // var $ = require("jquery");
 // import jQuery from 'jquery';
 
@@ -54,13 +57,13 @@ function startInit() {
 //   });
 // }(jQuery));
 
-$(function () {
-  $('#pixel-picker').pixelPicker({
-      palette: ['rgb(199, 23, 23)'],
-      // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
-      eraserColor: 'rgb(192,192,192)'
-  });
-});
+// $(function () {
+//   $('#pixel-picker').pixelPicker({
+//       palette: ['rgb(199, 23, 23)'],
+//       // '#ff0000', '#0000ff', '#ffff00', '#008000','rgb(199, 23, 23)''rgb(192,192,192)' 
+//       eraserColor: 'rgb(192,192,192)'
+//   });
+// });
 
 (function ($) {
 
@@ -418,7 +421,7 @@ $(function () {
     return this;
   };
 
-}(jQuery));
+}($));
 
 function imgSendButtonClick() {
   // save canvas image as data url (png format by default)
@@ -588,8 +591,15 @@ function imgSendButtonClick() {
 //   isDragging = false;
 // }
 
-// $(function () {
-//   $("imgSendButton").onclick(function () {
-//     alert("imgButton Click");
-//   });
-// });
+$(function () {
+
+  // var myIcon = new Image();
+  // myIcon.src=logo;
+
+  // var element = document.getElementById('hello');
+  // element.appendChild(myIcon);
+
+  $("imgSendButton").onclick(function () {
+    alert("imgButton Click");
+  });
+});
