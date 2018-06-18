@@ -1,14 +1,31 @@
 @font-face {
-    font-family: 'Roboto-Regular';
-    src: url('./Roboto-Regular.ttf') format('ttf');
+    font-family: 'Roboto';
+    src: url('./Roboto-Regular.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pacifico';
+    src: url('./Pacifico-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Lobster';
+    src: url('./Lobster-Regular.ttf') format('truetype');
+    font-weight: 400;
 }
 
 .hello {
     color: red;
     /* background: url('./logo.jpg'); */
-    font-family: 'Roboto-Regular';
+    font-family: 'Lobster';
+}
+
+.title {
+    font-family: 'Pacifico';
 }
 
 #pixel-picker {

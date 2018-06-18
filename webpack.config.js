@@ -28,9 +28,12 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: [
-          'file-loader'
-        ]
+        use: {
+          loader: 'url-loader',
+          options:{
+            limit: 50000
+          }
+        }
       },
       {
         test: /\.(csv|tsv)$/,
