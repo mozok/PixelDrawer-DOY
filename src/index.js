@@ -117,7 +117,7 @@ $(function () {
     // data += "&img=" + dataURL;
 
     console.log(data);
-    client.publish('DOYPanel/command', data);
+    client.publish('/DOYPanel/command', data);
   });
 
   $('#updateButton').click(function () {
@@ -286,8 +286,8 @@ $(function () {
 
     initialDraw = function () {
       currentColor = [192, 192, 192];
-      for (var i = 0.5; i < 1281; i += 20) {
-        for (var j = 0.5; j < 641; j += 20) {
+      for (var i = 0.5; i < 641; i += 20) {
+        for (var j = 0.5; j < 321; j += 20) {
           colorCell(i, j);
         }
       }
