@@ -13,6 +13,7 @@
  */
 import './style.css';
 import 'bulma/css/bulma.css';
+import html2canvas from 'html2canvas';
 import logo from './logo.jpg';
 
 import $ from 'jquery';
@@ -122,7 +123,13 @@ $(function () {
 
   $('#updateButton').click(function () {
     location.reload();
-  })
+  });
+
+  $('#photoButton').click(function () {
+    html2canvas(document.body).then(function(canvas) {
+      document.body.appendChild(canvas);
+  });
+  });
 });
 
 (function ($) {
