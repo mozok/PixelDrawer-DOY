@@ -28,6 +28,21 @@
     font-family: 'Pacifico';
 }
 
+.navbar {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-around;
+}
+
+/* .flex-right {
+     display: flex;
+    justify-content: flex-end; 
+} */
+
+.nav-el {
+    margin: 4px;
+}
+
 #pixel-picker {
     touch-action: none;
 }
