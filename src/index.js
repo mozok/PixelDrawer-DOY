@@ -121,14 +121,19 @@ $(function () {
     client.publish('/DOYPanel/command', data);
   });
 
-  $('#updateButton').click(function () {
-    location.reload();
-  });
+  // $('#updateButton').click(function () {
+    // location.reload();
+    
+  // });
 
   $('#photoButton').click(function () {
     html2canvas(document.body).then(function(canvas) {
       document.body.appendChild(canvas);
   });
+  });
+
+  $("#timeButton").click(function () {
+    client.publish('/DOYPanel/command', '0#0');
   });
 });
 
@@ -487,6 +492,11 @@ $(function () {
         isDragging = false;
       });
     }
+
+    $('#updateButton').click(function () {
+      initialDraw();
+    });
+
     return this;
   };
 
